@@ -1,6 +1,7 @@
 require 'csv'
 require 'google/apis/civicinfo_v2'
 require 'erb'
+require 'date'
 
 def clean_zipcode(input_zipcode)
   input_zipcode.to_s.rjust(5,"0")[0..4]
@@ -44,6 +45,26 @@ def save_thank_you_letter(id,form_letter)
   end
 end
 
+def datetime_method(input_date)
+  DateTime.strptime(input_date, '%m/%d/%y %H:%M').strftime('%m/%d/%y,%H:%M,%A').split(',')
+end
+
+def save_reg_table(input_reg_table)
+  Dir.mkdir("admin") unless Dir.exist? "admin"
+
+  filename = "admin/regtable.html"
+
+  File.open(filename, 'w') do |file|
+    file.puts input_reg_table
+  end
+
+  excel = "admin/regtable.xlsx"
+
+  File.open(excel, 'w') do |file|
+    file.puts input_reg_table
+  end
+end
+
 puts "EventManager Initialized!"
 puts
 
@@ -54,16 +75,18 @@ if File.exist? "event_attendees.csv"
   template_letter = File.read "form_letter.erb"
   erb_template = ERB.new template_letter
 
+  reg_table = File.read "reg_table.erb"
+  erb_reg_table = ERB.new reg_table
+  form_reg_table = erb_reg_table.result(binding)
+  save_reg_table(form_reg_table)
+
   contents.each do |row|
     id = row[0]
-    name = row[:first_name]
 
     zipcode = clean_zipcode(row[:zipcode])
-
     legislators = legislators_by_zipcode(zipcode)
 
     form_letter = erb_template.result(binding)
-
     save_thank_you_letter(id,form_letter)
   end
 

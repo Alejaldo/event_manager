@@ -1,0 +1,29 @@
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>Date&Time Table</title>
+</head>
+<body>
+  <h1>Hello epta!</h1>
+  <p>There is a table with time and date of user registration</p>
+
+  <table>
+    
+      <th>First Name</th>
+      <th>Last Time</th>
+      <th>Date of registration</th>
+      <th>Time of registration</th>
+      <th>Day of the Week</th>
+      <% contents.each do |user| %>
+        <tr>
+          <td><%= "#{user[:first_name]}" %></td>
+          <td><%= "#{user[:last_name]}" %></td>
+          <td><%= "#{datetime_method(user[:regdate])[0]}" %></td>
+          <td><%= "#{datetime_method(user[:regdate])[1]}" %></td>
+          <td><%= "#{datetime_method(user[:regdate])[2]}" %></td>
+        </tr>
+      <% end %>
+
+  </table>
+</body>
+</html>
