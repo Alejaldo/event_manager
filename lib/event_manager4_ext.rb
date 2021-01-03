@@ -36,9 +36,9 @@ def clean_phone(phone)
 end
 
 def save_thank_you_letter(id,form_letter)
-  Dir.mkdir("output") unless Dir.exist? "output"
+  Dir.mkdir("output_full_list") unless Dir.exist? "output_full_list"
 
-  filename = "output/thanks_#{id}.html"
+  filename = "output_full_list/thanks_#{id}.html"
 
   File.open(filename, 'w') do |file|
     file.puts form_letter
@@ -54,15 +54,15 @@ def datetime_method(input_date)
 end
 
 def save_reg_table(input_reg_table)
-  Dir.mkdir("admin") unless Dir.exist? "admin"
+  Dir.mkdir("admin_full_list") unless Dir.exist? "admin_full_list"
 
-  filename = "admin/regtable.html"
+  filename = "admin_full_list/regtable.html"
 
   File.open(filename, 'w') do |file|
     file.puts input_reg_table
   end
 
-  excel = "admin/regtable.xlsx"
+  excel = "admin_full_list/regtable.xlsx"
 
   File.open(excel, 'w') do |file|
     file.puts input_reg_table
@@ -72,9 +72,9 @@ end
 puts "EventManager Initialized!"
 puts
 
-if File.exist? "event_attendees.csv"
+if File.exist? "event_attendees_extended.csv"
 
-  contents = CSV.open "event_attendees.csv", headers: true, header_converters: :symbol
+  contents = CSV.open "event_attendees_extended.csv", headers: true, header_converters: :symbol
 
   template_letter = File.read "form_letter.erb"
   erb_template = ERB.new template_letter
